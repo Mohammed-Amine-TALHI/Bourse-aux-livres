@@ -1,0 +1,39 @@
+.not-found-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .not-found-container h1 {
+    font-size: 3rem;
+    color: #e74c3c;
+  }
+  
+  .not-found-container p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  .login {
+    align-self: center;
+    margin: 5px;
+  }
+  .layoutError {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .layoutError .layoutError_content {
+    min-width: 0;
+    flex-grow: 1;
+  }
+  .layoutError .layoutError_footer {
+    min-width: 0;
+  }
+  
+  .img-error {
+    max-width: 20rem;
+  }
+  
+  
+  
+  
+  

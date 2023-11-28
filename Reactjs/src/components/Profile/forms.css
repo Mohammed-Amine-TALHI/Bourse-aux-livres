@@ -1,0 +1,150 @@
+.form-wrapper {
+    height: calc(100vh - 250px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 15px;
+}
+/* profileStyles.css */
+.profile-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-image {
+    width: 120px;
+    border-radius: 50%;
+  }
+  
+  .profile-info {
+    margin-left: 20px;
+  }
+  
+  .profile-name {
+    font-size: 1.5rem;
+    margin: 5px 0;
+  }
+  
+  .profile-email {
+    color: #666;
+    margin: 0;
+  }
+  
+  .profile-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .profile-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust as needed to fit within your layout */
+  }
+  
+  .spinner {
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-top: 6px solid #007bff; /* Change color as needed */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .follow-btn {
+    background-color: #007bff;
+    color: #fff;
+  }
+.form-title {
+    font-size: 27px;
+    margin-bottom: 15px;
+    color: teal;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+}
+
+.form input {
+    border: 2px solid teal;
+    padding: 10px;
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+
+.form input:focus{
+    outline: none;
+}
+
+.form-btn {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 60px;
+    padding: 7px;
+    font-weight: 700;
+    font-size: 21px;
+    border: none;
+}
+
+.form-footer {
+    margin-top: 20px;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+@media (max-width: 520px){
+    .form-wrapper {
+        height: auto;
+    }
+}
