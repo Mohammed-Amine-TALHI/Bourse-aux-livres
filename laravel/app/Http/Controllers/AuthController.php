@@ -15,7 +15,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','me']]);
+        $this->middleware('auth:api', ['except' => ['login','register','me','isAdmin']]);
     }
 
     /**
@@ -88,8 +88,13 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth() -> user()
+            'user' => auth() -> user(),
         ]);
+    }
+    public function isAdmin(Request $request) {
+        if ($request->user() && $request->user()->role === 'admin') {
+            return response()->json(['isAdmin' => true]);
+        }
+        return response()->json(['isAdmin' => false]);
     }
 }

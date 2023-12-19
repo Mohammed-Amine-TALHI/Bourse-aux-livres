@@ -22,13 +22,14 @@ export default function AuthUser(){
 
     const [token,setToken] = useState(getToken());
     const [user,setUser] = useState(getUser());
-
+    const [userdetail,setUserdetail] = useState();
     const saveToken = (user,token) => {
         sessionStorage.setItem('token',JSON.stringify(token));
         sessionStorage.setItem('user',JSON.stringify(user));
         setToken(token);
         setToken(user);
         navigate('/');
+        
     }   
 
     const logout = () => {

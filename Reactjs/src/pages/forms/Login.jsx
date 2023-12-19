@@ -12,6 +12,7 @@ const Login = () => {
   const {http,setToken} = AuthUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userdetail,setUserdetail] = useState();
   const SubmitForm  = () => {
     http.post('/login',{email:email,password:password}).then((res)=>{
       setToken(res.data.user,res.data.access_token);

@@ -6,8 +6,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 function AdminPrivateRoute() {
   const location = useLocation();
-  const {token} = AuthUser() 
-  return token
+  const {role} = AuthUser() 
+  return role === "admin"
     ? <Outlet /> // <-- nested routes rendered here
     : <Navigate to="/login" replace state={{ from: location }} />;
 }

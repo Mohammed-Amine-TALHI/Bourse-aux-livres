@@ -6,10 +6,29 @@ import Footer_A from "./Footer_A";
 import routes from "../../routes/routes";
 import "./scripts.js";
 import "./styles.css";
+import AuthUser from '../../pages/forms/AuthUser';
+import { useState,useEffect } from 'react';
+import NotFound from '../../pages/404/NotFound';
+
 
 export const MasterLayout = () => {
-    return (
-        <div className="sb-nav-fixed">
+  const {http,token} = AuthUser();
+  const [userdetail,setUserdetail] = useState();
+
+  useEffect(()=>{
+    fetchUserDetail();
+},[]);
+
+const fetchUserDetail = () =>{
+    http.post('/me').then((res)=>{
+        setUserdetail(res.data);
+    })
+}
+function renderElement(){
+    if(userdetail){
+        return <div >
+            {userdetail.role === 'admin' ?  (
+              <div className="sb-nav-fixed">
             <NavBar />
             <div id="layoutSidenav">
                 <div id="layoutSidenav_nav">
@@ -37,8 +56,21 @@ export const MasterLayout = () => {
                 </div>
 
             </div>
-
+</div>) : (<div><NotFound/></div>)}
+            </div>
+      
+    }else{
+        return <div className="loading-container">
+        <div className="spinner">
         </div>
-    );
-};
+      </div>
+    }
+}
+return (
+<div>
+    {renderElement()}
+</div>
+);
+}
+
 export default MasterLayout;

@@ -43,12 +43,12 @@ function App() {
         <Route path="/PersonalProfile" element={<PersonalProfile />} />
         <Route path="/Addbook" element={<Addbook/>}/>
         <Route component={NotFound} />
-        {/*<Route path="/admin/*" element = {<MasterLayout/>}/>*/}
-        <Route element={<AdminPrivateRoute />} >
+        <Route path="/admin/*" element = {<MasterLayout/>}/>
+        {/*<Route element={<AdminPrivateRoute />} >
       {routes.map(({ path, component: Component }) => (
         <Route key={path} path={path} element={<Component />} />
       ))}
-    </Route>
+    </Route>*/}
       </Routes>
     </BrowserRouter>
   );
