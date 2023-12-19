@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthUser from '../../pages/forms/AuthUser';
 import swal from "sweetalert";
 
 
-function AddBook (){
+
+function EditBook (props){
+    const [loading,setLoading] = useState(true);
     const {http} = AuthUser();
     const [errorlist, setError] = useState([]);
+    const navigate = useNavigate();
+
     const [bookInput,setBook] = useState({
         category_id : '',
         isbn : '',
         book_title : '',
         description : '',
-        status:'',
         meta_title:'',
         meta_keyword:'',
         meta_descrip:'',
@@ -22,8 +25,6 @@ function AddBook (){
         selling_price : '',
         published_date : '',
         qty : '',
-        featured : '',
-        popular : '',
         school_name:'',
 
 
@@ -40,9 +41,14 @@ function AddBook (){
         setPicture({ cover_image:e.target.files[0]});
         
     }
+    const [allcheckbox,seCheckboxes] = useState([]);
+    const handleCheckBox = (e) => {
+        e.persist();
+        seCheckboxes({...allcheckbox, [e.target.name]:e.target.checked});
+    }
+  
 
-
-
+    const { id } = useParams();
     useEffect(()=>{
         http.get(`/all-category`).then(res=>{
             if(res.data.status === 200){
@@ -51,10 +57,26 @@ function AddBook (){
             }
 
         });
-        
-    },[]);
 
-    const submitBook = (e) => {
+        
+        http.get(`/edit-book/${id}`).then(res =>{
+            if(res.data.status === 200)
+            {
+                setBook(res.data.book);
+                seCheckboxes(res.data.book);
+                setLoading(false);
+            }else if(res.data.status === 404)
+            {
+                swal("Error",res.data.message,"error");
+                navigate('/admin/view-books');
+            }
+        });
+        
+    },[id,navigate]);
+
+     
+
+    const updateBook = (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('cover_image', picture.cover_image);
@@ -77,11 +99,11 @@ function AddBook (){
         formData.append('selling_price', bookInput.selling_price);
 
         formData.append('qty', bookInput.qty);
-        formData.append('featured', bookInput.featured);
-        formData.append('popular', bookInput.popular);
-        formData.append('status', bookInput.status);
+        formData.append('featured', allcheckbox.featured ? '1':'0');
+        formData.append('popular', allcheckbox.popular ? '1':'0');
+        formData.append('status', allcheckbox.status ? '1':'0');
 
-        http.post(`/store-book`, formData, {
+        http.post(`/update-book/${id}`, formData, {
             headers: {
               // Add your headers here
               // Example header for handling form data
@@ -90,32 +112,27 @@ function AddBook (){
           }).then(res =>{
             if (res.data.status === 200){
                 swal('Success',res.data.message,'success');
-                setBook({...bookInput,
-                    category_id : '',
-                    isbn : '',
-                    book_title : '',
-                    description : '',
-                    status:'',
-                    school_name:'',
-                    meta_title:'',
-                    meta_keyword:'',
-                    meta_descrip:'',
-                    author : '',
-                    genre : '',
-                    original_price : '',
-                    selling_price : '',
-                    published_date : '',
-                    qty : '',
-                    featured : '',
-                    popular : '',
-                });
+                console.log(allcheckbox);
                 setError([]);
             }else if (res.data.status === 422){
                 swal("All Fields are mandetory","","error");
                 setError(res.data.errors);
+            }else if (res.data.status === 422){
+                swal("Error",res.data.message,"error");
+                navigate('/admin/view-books');
+
             }
         });
     }
+    if(loading){
+        return <div className="loading-container">
+        <div className="spinner">
+        </div>
+      </div>
+    }
+
+
+
     return (
         <div className="container-fluid px-4">
             <div className="card mt-4">
@@ -125,7 +142,7 @@ function AddBook (){
                 </h4>
                 </div>
                 <div className="card-body">
-                    <form encType="multipart/form-data" onSubmit={submitBook} >
+                    <form encType="multipart/form-data" onSubmit={updateBook} >
                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
@@ -156,13 +173,13 @@ function AddBook (){
                                 <small className="text-danger">{errorlist.category_id}</small>
                             </div>
                             {bookInput.category_id === '30' && (
-              <div className="form-group mb-3">
-                <label>School name</label>
-                <input
-                  type="text" name="school_name" onChange={handleInput} value={bookInput.school_name} className="form-control"
-                />
-                {/* You can add validation error handling for this field if needed */}
-              </div>
+                                <div className="form-group mb-3">
+                                    <label>School name</label>
+                                    <input
+                                    type="text" name="school_name" onChange={handleInput} value={bookInput.school_name} className="form-control"
+                                    />
+                                    {/* You can add validation error handling for this field if needed */}
+                                 </div>
             )}
                             <div className="form-group mb-3">
                                 <label >ISBN </label>
@@ -234,19 +251,20 @@ function AddBook (){
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Featured (checked=shown)</label>
-                                        <input type ="checkbox" name ="featured" onChange={handleInput} value={bookInput.featured} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="featured" onChange={handleCheckBox} defaultChecked={allcheckbox.featured === 1  ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Popular (checked=shown)</label>
-                                        <input type ="checkbox" name ="popular" onChange={handleInput} value={bookInput.popular} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="popular" onChange={handleCheckBox} defaultChecked={allcheckbox.popular === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Status (checked=Hidden)</label>
-                                        <input type ="checkbox" name ="status" onChange={handleInput} value={bookInput.status} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-8 from-group mb-3">
                                         <label >Cover Image</label>
                                         <input type ="file" name ="cover_image" onChange={handleImage}  className="form-control"/>
+                                        <img src={`http://127.0.0.1:8000/${bookInput.cover_image}`} width="50px" />
                                         <small className="text-danger">{errorlist.cover_image}</small>
                                     </div>
                             </div>
@@ -260,4 +278,4 @@ function AddBook (){
         </div>
     );
 }
-export default AddBook;
+export default EditBook;

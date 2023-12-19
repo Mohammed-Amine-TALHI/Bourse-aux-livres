@@ -39,6 +39,10 @@ Route::get('all-category',[CategoryController::class,'allcategory']);
 
 
 Route::post('store-book',[BookController::class,'store']);
+Route::get('view-books',[BookController::class,'index']);
+Route::get('edit-book/{id}',[BookController::class,'edit']);
+Route::post('update-book/{id}',[BookController::class,'update']);
+
 
 });
 
