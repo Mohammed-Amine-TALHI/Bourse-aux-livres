@@ -1,77 +1,263 @@
 import Header from "../../components/header/Header";
-import React,{ useState } from "react";
+import React,{ useEffect, useState } from "react";
 import AuthUser from '../../pages/forms/AuthUser';
 import NotFound from "../404/NotFound";
+import swal from "sweetalert";
+import { Link } from "react-router-dom";
 const Addbook = () => {
   const {http,token} = AuthUser();
-  const [description, setDescription] = useState('');
-  const maxWords = 100; // Set your desired word limit here
+  const [errorlist, setError] = useState([]);
+  const [bookInput,setBook] = useState({
+      category_id : '',
+      isbn : '',
+      book_title : '',
+      description : '',
+      status:'',
+      meta_title:'',
+      meta_keyword:'',
+      meta_descrip:'',
+      author : '',
+      genre : '',
+      original_price : '',
+      selling_price : '',
+      published_date : '',
+      qty : '',
+      featured : '',
+      popular : '',
+      school_name:'',
 
-  const handleChange = (event) => {
-    const words = event.target.value.split(/\s+/).filter((word) => word.length > 0);
-    const remainingWords = maxWords - words.length;
 
-    if (remainingWords >= 0) {
-      setDescription(event.target.value);
-    } else {
-      setDescription(event.target.value.split(/\s+/).slice(0, maxWords).join(' '));
-    }
-  };
+  });
+  const [categorylist,setCategorylist] = useState([]);
+  const [picture,setPicture] = useState([]);
 
-  
+  const handleInput = (e) => {
+      e.persist();
+      setBook({...bookInput, [e.target.name]:e.target.value});
+  }
+  const handleImage = (e) => {
+      console.log(e.target.files[0]); // Check the console for the selected file
+      setPicture({ cover_image:e.target.files[0]});
+      
+  }
+  const [allcheckbox,seCheckboxes] = useState([]);
+  const handleCheckBox = (e) => {
+      e.persist();
+      seCheckboxes({...allcheckbox, [e.target.name]:e.target.checked});
+  }
+
+
+
+  useEffect(()=>{
+      http.get(`/all-category`).then(res=>{
+          if(res.data.status === 200){
+              setCategorylist(res.data.category);
+
+          }
+
+      });
+      
+  },[]);
+
+  const submitBook = (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('cover_image', picture.cover_image);
+      //console.log(picture.cover_image);
+      //console.log(formData);
+      formData.append('category_id', bookInput.category_id);
+      formData.append('book_title', bookInput.book_title);
+      formData.append('isbn', bookInput.isbn);
+      formData.append('description', bookInput.description);
+
+      formData.append('meta_title', bookInput.meta_title);
+      formData.append('meta_keyword', bookInput.meta_keyword);
+      formData.append('meta_descrip', bookInput.meta_descrip);
+      formData.append('school_name', bookInput.school_name);
+
+      formData.append('author', bookInput.author);
+      formData.append('genre', bookInput.genre);
+      formData.append('published_date', bookInput.published_date);
+      formData.append('original_price', bookInput.original_price);
+      formData.append('selling_price', bookInput.selling_price);
+
+      formData.append('qty', bookInput.qty);
+      formData.append('featured', allcheckbox.featured ? '1':'0');
+      formData.append('popular', allcheckbox.popular ? '1':'0');
+      formData.append('status', allcheckbox.status ? '1':'0');
+
+      http.post(`/store-book`, formData, {
+          headers: {
+            // Add your headers here
+            // Example header for handling form data
+            "Content-Type": "multipart/form-data",
+          },
+        }).then(res =>{
+          if (res.data.status === 200){
+              swal('Success',res.data.message,'success');
+              setBook({...bookInput,
+                  category_id : '',
+                  isbn : '',
+                  book_title : '',
+                  description : '',
+                  school_name:'',
+                  meta_title:'',
+                  meta_keyword:'',
+                  meta_descrip:'',
+                  author : '',
+                  genre : '',
+                  original_price : '',
+                  selling_price : '',
+                  published_date : '',
+                  qty : '',
+              });
+              setError([]);
+          }else if (res.data.status === 422){
+              swal("All Fields are mandetory","","error");
+              setError(res.data.errors);
+          }
+      });
+  }
     return (
       <div>
         {token ?  (
         <section>
           <Header/>
-        <div class="book-form">
-  <h2>Add a New Book</h2>
-  <form>
-  <label for="title">Title:</label>
-  <input type="text" id="title" name="title" placeholder="Enter the book title" required />
+        <div className="container-fluid px-4">
+  <h2>Add a New Book
+  <Link to ="/Dashboard" className = "btn btn-primary btn-sm float-end">Dashboard</Link>
+  </h2>
+  <form encType="multipart/form-data" onSubmit={submitBook} >
+                        <ul className="nav nav-tabs" id="myTab" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="seotags-tab" data-bs-toggle="tab" data-bs-target="#seotags" type="button" role="tab" aria-controls="seotags" aria-selected="false">SEO tags</button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="otherdetails-tab" data-bs-toggle="tab" data-bs-target="#otherdetails" type="button" role="tab" aria-controls="otherdetails" aria-selected="false">Other details</button>
+                            </li>
+                        </ul>
+                        <div className="tab-content" id="myTabContent">
+                        <div className="tab-pane card-body bordered fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
 
-  <label for="author">Author:</label>
-  <input type="text" id="author" name="author" placeholder="Enter the author's name" required />
+                            <div className="form-group mb-3">
+                                <label >Select Category </label>
+                                <select name="category_id" onChange={handleInput} value={bookInput.category_id} className="form-control">
+                                    <option >Select</option>
+                                    {
+                                        categorylist.map( (item)=>{
+                                            return (
+                                                <option value ={item.id} key={item.id} >{item.name}</option>
+                                            )
+                                        } )
+                                    }
+                                    
+                                </select>
+                                <small className="text-danger">{errorlist.category_id}</small>
+                            </div>
+                            {bookInput.category_id === '30' && (
+              <div className="form-group mb-3">
+                <label>School name</label>
+                <input
+                  type="text" name="school_name" onChange={handleInput} value={bookInput.school_name} className="form-control"
+                />
+                {/* You can add validation error handling for this field if needed */}
+              </div>
+            )}
+                            <div className="form-group mb-3">
+                                <label >ISBN </label>
+                                <input type="text" name="isbn" onChange={handleInput} value={bookInput.isbn} className="form-control" />
+                                <small className="text-danger">{errorlist.isbn}</small>
 
-  <label for="genre">Genre:</label>
-  <select id="genre" name="genre" required>
-    <option value="">Select a Genre</option>
-    <option value="Mystery">Mystery</option>
-    <option value="Science Fiction">Science Fiction</option>
-    <option value="Fantasy">Fantasy</option>
-    <option value="Romance">Romance</option>
-  </select>
+                            </div>
+                            <div className="form-group mb-3">
+                                <label >Book Title </label>
+                                <input type="text" name="book_title" onChange={handleInput} value={bookInput.book_title} className="form-control" />
+                                <small className="text-danger">{errorlist.book_title}</small>
+                                
+                            </div>
+                            <div className="form-group mb-3">
+                                <label >Description </label>
+                                <textarea type="text" name="description" onChange={handleInput} value={bookInput.description} className="form-control" ></textarea>
+                                <small className="text-danger">{errorlist.description}</small>
+                            </div>
+                        
+                        </div>
+                        <div className="tab-pane card-body bordered fade" id="seotags" role="tabpanel" aria-labelledby="seotags-tab" tabIndex="0">
 
-  <label for="year">Publication Year:</label>
-  <input type="date" id="year" name="year" required />
-  
-      <label htmlFor="description">Description:</label>
-      <textarea
-        id="description"
-        name="description"
-        rows="6"
-        value={description}
-        onChange={handleChange}
-        placeholder="Enter your description here"
-        required
-      ></textarea>
-      <p className="word-count">
-        {description.split(/\s+/).filter((word) => word.length > 0).length}/100
-      </p>
-    
+                            <div className="form-group mb-3">
+                                <label>Meta Title </label>
+                                <input type ="text" name ="meta_title" onChange={handleInput} value={bookInput.meta_title} className="form-control"/>
+                                <small className="text-danger">{errorlist.meta_title}</small>
+                                
+                            </div>
+                            <div className="form-group mb-3">
+                                <label>Meta Keywords</label>
+                                <textarea name ="meta_keyword" onChange={handleInput} value={bookInput.meta_keyword} className="form-control"></textarea>
+                            </div>
+                            <div className="form-group mb-3">
+                                <label>Meta Description</label>
+                                <textarea name ="meta_descrip" onChange={handleInput} value={bookInput.meta_descrip} className="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div className="tab-pane card-body bordered fade" id="otherdetails" role="tabpanel" aria-labelledby="otherdetails-tab" tabIndex="0">
 
-  
-  <label for="image">Upload Image:</label>
-  <div class="image-upload">
-    <input type="file" id="image" name="image" accept="image/*" required />
-    <label for="image" class="upload-button"><i class="fa fa-upload"></i> Choose File</label>
+                            <div className="row">
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Author</label>
+                                        <input type ="text" name ="author" onChange={handleInput} value={bookInput.author} className="form-control"/>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Published Date</label>
+                                        <input type ="date" name ="published_date" onChange={handleInput} value={bookInput.published_date} className="form-control"/>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Genre</label>
+                                        <input type ="text" name ="genre" onChange={handleInput} value={bookInput.genre} className="form-control"/>
+                                        <small className="text-danger">{errorlist.genre}</small>
+                                    
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Selling Price</label>
+                                        <input type ="text" name ="selling_price" onChange={handleInput} value={bookInput.selling_price}  className="form-control"/>
+                                        <small className="text-danger">{errorlist.selling_price}</small>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Original Price</label>
+                                        <input type ="text" name ="original_price" onChange={handleInput} value={bookInput.original_price} className="form-control"/>
+                                        <small className="text-danger">{errorlist.original_price}</small>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Quantity</label>
+                                        <input type ="text" name ="qty" onChange={handleInput} value={bookInput.qty} className="form-control"/>
+                                        <small className="text-danger">{errorlist.qty}</small>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Featured (checked=shown)</label>
+                                        <input type ="checkbox" name ="featured" onChange={handleCheckBox} defaultChecked={allcheckbox.featured === 1 ? true:false} className="w-50 h-50"/>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Popular (checked=shown)</label>
+                                        <input type ="checkbox" name ="popular" onChange={handleCheckBox} defaultChecked={allcheckbox.popular === 1 ? true:false} className="w-50 h-50"/>
+                                    </div>
+                                    <div className="col-md-4 from-group mb-3">
+                                        <label >Status (checked=Hidden)</label>
+                                        <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true:false} className="w-50 h-50"/>
+                                    </div>
+                                    <div className="col-md-8 from-group mb-3">
+                                        <label >Cover Image</label>
+                                        <input type ="file" name ="cover_image" onChange={handleImage}  className="form-control"/>
+                                        <small className="text-danger">{errorlist.cover_image}</small>
+                                    </div>
+                            </div>
 
-    <p class="subcategories">Supported formats: JPG, PNG, GIF</p>
-  </div>
-
-  <button type="submit">Add Book</button>
-</form>
-</div>
+                        </div>
+                        </div>
+                        <button type="submit" className="btn btn-primary px-4 mt-2">Submit</button>
+                    </form>
+                  </div>
 </section>) : (<div><NotFound/></div>)}
 
       

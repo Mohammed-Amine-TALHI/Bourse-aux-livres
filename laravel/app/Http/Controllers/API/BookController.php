@@ -15,11 +15,34 @@ class BookController extends Controller
 
     public function index ()
     {
-        $books = Book::all();
+        /*$books = Book::all();
         return response()->json([
             'status'=>200,
             'Products'=>$books
-        ]);
+        ]);*/
+
+         // Check if the authenticated user is an admin
+            $isAdmin = Auth::check() && Auth::user()->role === 'admin';
+
+            if ($isAdmin) {
+                // Admin: Get all books
+                $books = Book::all();
+            } else {
+                // Non-admin: Get books by the user's ID
+                $userId = Auth::id();
+                $books = Book::where('seller_id', $userId)->get();
+            }
+            if ($books->isEmpty()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No books found for the user.',
+                ]);
+            }
+            return response()->json([
+                'status' => 200,
+                'Products' => $books,
+            ]);
+         
     }
     public function update (Request $request,$id){
         $validator = Validator ::make($request->all(),[
@@ -27,7 +50,7 @@ class BookController extends Controller
             'isbn'=> 'required|max:191',
             'category_id'=>'required|max:191',
             'book_title'=>'required|max:191',
-            //'cover_image'=>'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cover_image'=>'required|image|mimes:jpeg,png,jpg|max:2048',
             'genre'=>'required|max:191',
             'selling_price'=>'required|max:191',
             'original_price'=>'required|max:191',

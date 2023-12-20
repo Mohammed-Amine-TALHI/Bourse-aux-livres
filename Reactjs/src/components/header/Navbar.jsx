@@ -15,11 +15,11 @@ const Navbar = ({ toggle, setToggle }) => {
           Authors
         </Link>
         <Link
-          to=""
+          to="/collections"
           onClick={() => setToggle(false)}
           className="navbar-link"
         >
-          Category
+          Collection
         </Link>
         {/*<Link
           to="/contact"

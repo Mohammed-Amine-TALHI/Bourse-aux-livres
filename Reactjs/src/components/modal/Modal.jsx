@@ -42,7 +42,7 @@ const Modal = ({ bookData, setOpenModal }) => {
           <div className="modal-content-info-price">
             <b>Price: </b>${price}
           </div>
-          {/*<div className="modal-add-to-cart">
+          <div className="modal-add-to-cart">
             <input
               className="modal-add-to-cart-input"
               type="number"
@@ -55,7 +55,7 @@ const Modal = ({ bookData, setOpenModal }) => {
               <i className="bi bi-cart-plus"></i>
               Add To Cart
             </button>
-           </div>*/}
+           </div>
           <Link
             onClick={() => setOpenModal(false)}
             className="modal-content-info-link"

@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import AuthUser from '../../pages/forms/AuthUser';
+import { Link, useNavigate } from "react-router-dom";
+import "../forms/forms.css";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AuthUser from "../forms/AuthUser";
+import swal from "sweetalert";
 
 
-function ViewBooks (){
+function DashboardUser() {
     const {http} = AuthUser();
     const [viewBooks, setBook] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
     const [userdetail,setUserdetail] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -22,6 +26,9 @@ function ViewBooks (){
             if(res.data.status === 200){
                 setBook(res.data.Products);
                 setLoading(false);
+            }else if (res.data.status === 404){
+                swal("Error",res.data.message,"error");
+                navigate("/addbook");
             }
 
         });
@@ -43,6 +50,7 @@ function ViewBooks (){
       </div>
     }
     else{
+
         filteredBooks = viewBooks.filter((item) =>
             (item.book_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.selling_price.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -51,7 +59,7 @@ function ViewBooks (){
         );
         
         var BookStatus = '';
-        display_Booksdata = filteredBooks.map( (item)=>{
+        display_Booksdata = viewBooks.map( (item)=>{
             if (item.status == '0')
             {
                 BookStatus = 'Shown';
@@ -77,8 +85,11 @@ function ViewBooks (){
         const categories = [...new Set(viewBooks.map(item => item.category.name))];
         const ids = [...new Set(viewBooks.map(item => item.id))];
         const sellers = [...new Set(viewBooks.map(item => item.user.name))];
+
+
     return (
-<div className="container px-4 mt-3">
+        <div className="form-wrapper">
+            <div className="container px-4 mt-3">
             <div className="card">
                 <div className="card-header">
                     <h4>View Books
@@ -158,6 +169,8 @@ function ViewBooks (){
                 </div> 
             </div>
     </div>
+        </div>
     );
 }
-export default ViewBooks;
+
+export default DashboardUser;

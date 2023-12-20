@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
+use App\Models\User;
 
 class Book extends Model
 {
@@ -30,10 +31,15 @@ class Book extends Model
         'featured',
         'popular',
         'description',
+        'seller_id',
     ];
-    protected $with = ['category'];
+    protected $with = ['category', 'user']; 
     public function category()
     {
         return $this->belongsTo(Category::class,'category_id','id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class,'seller_id','id');
     }
 }

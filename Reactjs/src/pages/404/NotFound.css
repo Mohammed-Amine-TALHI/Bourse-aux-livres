@@ -2,16 +2,6 @@
     text-align: center;
     margin-top: 50px;
   }
-  
-  .not-found-container h1 {
-    font-size: 3rem;
-    color: #e74c3c;
-  }
-  
-  .not-found-container p {
-    font-size: 1.2rem;
-    color: #555;
-  }
   .login {
     align-self: center;
     margin: 5px;
@@ -32,6 +22,24 @@
   .img-error {
     max-width: 20rem;
   }
+  /* Add this to the relevant elements */
+body {
+  font-family: 'Hacked', sans-serif;
+}
+
+/* Example usage for specific elements */
+.not-found-container h1 {
+  font-family: 'Hacked', sans-serif;
+  font-size: 3rem;
+  color: #e74c3c;
+}
+
+.not-found-container p {
+  font-family: 'Hacked', sans-serif;
+  font-size: 1.2rem;
+  color: #555;
+}
+
   
   
   

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\BookController;
+use App\Http\Controllers\API\FrontendController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,11 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login', [AuthController::class,'login']);
 Route::post('register', [AuthController::class,'register']);
+Route::get('getCategory',[FrontendController::class,'category']);
+Route::get('fetchbooks/{slug}',[FrontendController::class,'book']);
+
+
+
 
 Route::group(['middleware'=>'api'],function(){
 Route::post('logout', [AuthController::class,'logout']);
 Route::post('refresh', [AuthController::class,'refresh']);
 Route::post('me', [AuthController::class,'me']);
+Route::get('users', [AuthController::class,'index']);
 
 
 Route::get('view-category',[CategoryController::class,'index']);
@@ -42,6 +49,7 @@ Route::post('store-book',[BookController::class,'store']);
 Route::get('view-books',[BookController::class,'index']);
 Route::get('edit-book/{id}',[BookController::class,'edit']);
 Route::post('update-book/{id}',[BookController::class,'update']);
+Route::put('users/{id}/update-role', [AuthController::class, 'updateRole']);
 
 
 });

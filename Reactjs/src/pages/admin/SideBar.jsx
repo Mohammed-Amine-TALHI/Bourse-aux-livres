@@ -23,9 +23,9 @@ const SideBar = () => {
                                 <div className="sb-nav-link-icon"><i><AiFillFund/></i></div>
                                 Dashboard
                             </Link>
-                            <Link className="nav-link" to="/admin/Profile">
+                            <Link className="nav-link" to="/admin/Users">
                                 <div className="sb-nav-link-icon"><i><FaUserCog /></i></div>
-                                Profile
+                                Users
                             </Link>
                             <Link className="nav-link" to="/admin/add-category">
                                 <div className="sb-nav-link-icon"><i><MdAddHome/></i></div>

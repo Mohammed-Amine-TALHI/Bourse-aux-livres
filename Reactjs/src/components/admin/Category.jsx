@@ -11,7 +11,6 @@ function Category (){
         slug:'',
         name:'',
         description:'',
-        status:'',
         meta_title:'',
         meta_keyword:'',
         meta_descrip:'',
@@ -23,7 +22,7 @@ function Category (){
             slug:CategoryInput.slug,
             name:CategoryInput.name,
             description:CategoryInput.description,
-            status:CategoryInput.status,
+            status:allcheckbox.status ? 1 : 0,
             meta_title:CategoryInput.meta_title,
             meta_keyword:CategoryInput.meta_keyword,
             meta_descrip:CategoryInput.meta_descrip,
@@ -47,7 +46,11 @@ function Category (){
         e.persist();
         setCategory({...CategoryInput,[e.target.name]: e.target.value});
     }
-
+    const [allcheckbox,seCheckboxes] = useState([]);
+    const handleCheckBox = (e) => {
+        e.persist();
+        seCheckboxes({...allcheckbox, [e.target.name]:e.target.checked});
+    }
     var DisplayErrors = [];
     if(CategoryInput.error_list){
         DisplayErrors = [
@@ -101,7 +104,7 @@ function Category (){
                 </div>
                 <div className="form-group mb-3 ">
                     <label>Status</label>
-                    <input type ="checkbox" name ="status" onChange={handleInput} value={CategoryInput.status}/> Status 0=shown/1=hidden
+                    <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true : false}/> Status 0=shown/1=hidden
                 </div>
             </div>
             <div className="tab-pane fade  " id="seo-tags" role="tabpanel" aria-labelledby="seo-tags-tab" tabIndex="0">

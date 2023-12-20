@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -33,8 +34,32 @@ class AuthController extends Controller
 
         return $this->respondWithToken($token);
     }
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::find($id);
 
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
+        $request->validate([
+            'role' => 'required|in:admin,user', // Add any other validation rules as needed
+        ]);
+
+        $user->role = $request->input('role');
+        $user->save();
+
+        return response()->json(['message' => 'User role updated successfully']);
+    }
+
+    public function index (){
+        $user = User::all();
+        return response()->json([
+            'status'=>200,
+            'user'=>$user,
+
+        ]);
+    }
 
     public function register()
     {

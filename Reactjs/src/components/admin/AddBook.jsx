@@ -40,6 +40,11 @@ function AddBook (){
         setPicture({ cover_image:e.target.files[0]});
         
     }
+    const [allcheckbox,seCheckboxes] = useState([]);
+    const handleCheckBox = (e) => {
+        e.persist();
+        seCheckboxes({...allcheckbox, [e.target.name]:e.target.checked});
+    }
 
 
 
@@ -77,9 +82,9 @@ function AddBook (){
         formData.append('selling_price', bookInput.selling_price);
 
         formData.append('qty', bookInput.qty);
-        formData.append('featured', bookInput.featured);
-        formData.append('popular', bookInput.popular);
-        formData.append('status', bookInput.status);
+        formData.append('featured', allcheckbox.featured ? '1':'0');
+        formData.append('popular', allcheckbox.popular ? '1':'0');
+        formData.append('status', allcheckbox.status ? '1':'0');
 
         http.post(`/store-book`, formData, {
             headers: {
@@ -95,7 +100,6 @@ function AddBook (){
                     isbn : '',
                     book_title : '',
                     description : '',
-                    status:'',
                     school_name:'',
                     meta_title:'',
                     meta_keyword:'',
@@ -106,8 +110,6 @@ function AddBook (){
                     selling_price : '',
                     published_date : '',
                     qty : '',
-                    featured : '',
-                    popular : '',
                 });
                 setError([]);
             }else if (res.data.status === 422){
@@ -234,15 +236,15 @@ function AddBook (){
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Featured (checked=shown)</label>
-                                        <input type ="checkbox" name ="featured" onChange={handleInput} value={bookInput.featured} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="featured" onChange={handleCheckBox} defaultChecked={allcheckbox.featured === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Popular (checked=shown)</label>
-                                        <input type ="checkbox" name ="popular" onChange={handleInput} value={bookInput.popular} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="popular" onChange={handleCheckBox} defaultChecked={allcheckbox.popular === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Status (checked=Hidden)</label>
-                                        <input type ="checkbox" name ="status" onChange={handleInput} value={bookInput.status} className="w-50 h-50"/>
+                                        <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-8 from-group mb-3">
                                         <label >Cover Image</label>

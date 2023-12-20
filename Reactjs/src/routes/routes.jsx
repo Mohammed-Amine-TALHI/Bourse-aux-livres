@@ -6,6 +6,8 @@ import EditCategory from "../components/admin/EditCategory";
 import AddBook from "../components/admin/AddBook";
 import ViewBooks from "../components/admin/ViewBooks";
 import EditBook from "../components/admin/EditBook";
+import ViewUsers from "../components/admin/ViewUsers";
+import EditUserRole from "../components/admin/EditUserRole";
 
 
 
@@ -18,8 +20,11 @@ const routes = [
     { path : '/view-category' , exact:true , name: 'Viewcategory', component : ViewCategory},
     { path : '/edit-category/:id' , exact:true , name: 'Editcategory', component : EditCategory},
     { path : '/edit-book/:id' , exact:true , name: 'Editbook', component : EditBook},
+    { path : '/edit-user' , exact:true , name: 'EditUserRole', component : EditUserRole},
     { path : '/add-book' , exact:true , name: 'AddBook', component : AddBook},
     { path : '/view-books' , exact:true , name: 'ViewBooks', component : ViewBooks},
+    { path : '/users' , exact:true , name: 'ViewUsers', component : ViewUsers},
+
 ];
 
 export default routes;

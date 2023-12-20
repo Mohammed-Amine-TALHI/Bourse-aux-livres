@@ -7,13 +7,29 @@ import { useParams } from 'react-router-dom';
 
 function EditCategory (){
     const [loading,setLoading] = useState(true);
-    const [CategoryInput, setCategory] = useState([]);
+    //const [CategoryInput, setCategory] = useState([]);
     const [error, setError] = useState([]);
     const navigate = useNavigate();
     const {http}=AuthUser();
     const { id } = useParams();
+    const [CategoryInput, setCategory] = useState({
+        slug: "",
+        name: "",
+        description: "",
+        status: 0, // Add status property for checkbox
+        meta_title: "",
+        meta_keyword: "",
+        meta_descrip: "",
+      });
     
-
+    const [allcheckbox,seCheckboxes] = useState([]);
+    const handleCheckBox = (e) => {
+        e.persist();
+        setCategory({
+            ...CategoryInput,
+            [e.target.name]: e.target.checked ? 1 : 0, // Convert boolean to 1 or 0
+          });
+    }
     useEffect(()=>{
         http.get(`/edit-category/${id}`).then(res=>{
             if(res.data.status===200){
@@ -90,7 +106,7 @@ function EditCategory (){
                 </div>
                 <div className="form-group mb-3 ">
                     <label>Status</label>
-                    <input type ="checkbox" name ="status" onChange={handleInput} value={CategoryInput.status} /> Status 0=shown/1=hidden
+                    <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={CategoryInput.status === 1 ? true:false} /> Status 0=shown/1=hidden
                 </div>
             </div>
             <div className="tab-pane fade  " id="seo-tags" role="tabpanel" aria-labelledby="seo-tags-tab" tabIndex="0">

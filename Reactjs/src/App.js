@@ -6,11 +6,12 @@ import About from "./pages/about/About";
 import Authors from "./pages/authors/Authors";
 import BookPage from "./pages/book/BookPage";
 import Cart from "./pages/cart/Cart";
-import Contact from "./pages/contact/Contact";
+import Collection from "./pages/Collection/Collection";
+import ViewBook from "./pages/Collection/ViewBook";
 import Login from "./pages/forms/Login";
 import Register from "./pages/forms/Register";
 import HomePage from "./pages/home/HomePage";
-import Dashboard_Login from "./pages/home/Dashboard_Login";
+import DashboardUser from "./pages/home/DashboardUser";
 import AuthUser from "./pages/forms/AuthUser";
 import PersonalProfile from "./components/Profile/PersonalProfile";
 import Addbook from "./pages/forms/Addbook";
@@ -34,12 +35,13 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/book/:id" element={<BookPage />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/collections" element={<Collection />} />
+        <Route path="/collections/:slug" element={<ViewBook />} />
         <Route path="/authors" element={<Authors />} />
         <Route path="/about" element={<About />} />
-        <Route path="/Dashboard" element={<Dashboard_Login />} />
+        <Route path="/Dashboard" element={<DashboardUser />} />
         <Route path="/PersonalProfile" element={<PersonalProfile />} />
         <Route path="/Addbook" element={<Addbook/>}/>
         <Route component={NotFound} />
