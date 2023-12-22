@@ -3,16 +3,17 @@ import "./App.css";
 import Footer from "./components/footer/Footer";
 import Header from "./components/header/Header";
 import About from "./pages/about/About";
-import Authors from "./pages/authors/Authors";
+import ViewBooks from "./pages/Bookspage/ViewBooks";
 import BookPage from "./pages/book/BookPage";
 import Cart from "./pages/cart/Cart";
 import Collection from "./pages/Collection/Collection";
+import WishList from "./pages/Collection/WishList";
 import ViewBook from "./pages/Collection/ViewBook";
 import Login from "./pages/forms/Login";
 import Register from "./pages/forms/Register";
 import HomePage from "./pages/home/HomePage";
 import DashboardUser from "./pages/home/DashboardUser";
-import AuthUser from "./pages/forms/AuthUser";
+import EditBookUser from "./pages/home/EditBookUser";
 import PersonalProfile from "./components/Profile/PersonalProfile";
 import Addbook from "./pages/forms/Addbook";
 import NotFound from "./pages/404/NotFound";
@@ -34,18 +35,21 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/book/:id" element={<BookPage />} />
+        <Route path="/collections/:category/:id" element={<BookPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/wish-List" element={<WishList />} />
         <Route path="/register" element={<Register />} />
         <Route path="/collections" element={<Collection />} />
         <Route path="/collections/:slug" element={<ViewBook />} />
-        <Route path="/authors" element={<Authors />} />
+        <Route path="/edit-book/:id" element={<EditBookUser />} />
+        <Route path="/books" element={<ViewBooks />} />
         <Route path="/about" element={<About />} />
         <Route path="/Dashboard" element={<DashboardUser />} />
         <Route path="/PersonalProfile" element={<PersonalProfile />} />
         <Route path="/Addbook" element={<Addbook/>}/>
         <Route component={NotFound} />
         <Route path="/admin/*" element = {<MasterLayout/>}/>
+
         {/*<Route element={<AdminPrivateRoute />} >
       {routes.map(({ path, component: Component }) => (
         <Route key={path} path={path} element={<Component />} />

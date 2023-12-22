@@ -1,93 +1,129 @@
-import { useParams } from "react-router-dom";
-import "./book.css";
-import { books } from "../../data/books";
-import Rating from "../../components/book-slider/Rating";
-import {useState,useContext} from "react";
-import BookStoreContext from "../../context/bookStorContext";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
+import AuthUser from "../forms/AuthUser";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
+import Rating from "../../components/book-slider/Rating";
+import BookStoreContext from "../../context/bookStorContext";
+import "./book.css";
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const BookPage = () => {
   const { addToCart } = useContext(BookStoreContext);
+  const navigate = useNavigate();
+  const { http } = AuthUser();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { category, id } = useParams();
 
-  const { id } = useParams();
-  const [qty, setQty] = useState(1);
+  useEffect(() => {
+    let isMounted = true;
 
-  const book = books.find((b) => b.id === +id);
+    http.get(`/collections/${category}/${id}`).then((res) => {
+      if (isMounted) {
+        if (res.data.status === 200) {
+          setBook(res.data.book);
+          setLoading(false);
+        } else if (res.data.status === 404) {
+          navigate('/collections');
+          swal('Warning', res.data.message, 'error');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [category, id, navigate]);
+  const handleContactSeller = () => {
+    // Add your logic to handle the contact seller action
+    swal("Contact Seller", ` Phone Number : ${book.user.phonenumber}`, "info");
+  };
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Contact Seller
+    </Tooltip>
+  );
+  const submitAddtoWishlist = (e) =>{
+    e.preventDefault();
+    const data = {
+      book_id:book.id,
+    }
+    http.post(`/add-to-wish`,data).then(res=>{
+      if(res.data.status === 201){
+        swal("Success",res.data.message,'success');
+      }else if (res.data.status === 409){
+        //Already added to wishlist
+        swal("Success",res.data.message,'success');
+      }else if (res.data.status === 401){
+
+        swal("Error",res.data.message,'error');
+      }else if (res.data.status === 404){
+        swal("Warning",res.data.message,'warning');
+      }
+
+    });
+  }
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
-    <Header/>
-    <div className="book">
-      <div className="book-content">
-        <img
-          src={`/books/${book.image}`}
-          alt={book.title}
-          className="book-content-img"
-        />
-        <div className="book-content-info">
-          <h1 className="book-title">{book.title}</h1>
-          <div className="book-author">
-            by <span>{book.author}</span> (Author)
-          </div>
-          <Rating rating={book.rating} reviews={book.reviews} />
-          {/*<div className="book-add-to-cart">
-            <input
-              className="book-add-to-cart-input"
-              type="number"
-              min="1"
-              max="100"
-              value={qty}
-              onChange={e => setQty(e.target.value)}
-            />
-            <button onClick={() => addToCart(book,qty)} className="book-add-to-cart-btn">
-              <i className="bi bi-cart-plus"></i>
-              Add To Cart
+      <Header />
+      <div className="book">
+        <div className="container">
+          <h6>Collections / {book.category.name} / {book.book_title}</h6>
+        </div>
+        <div className="book-content">
+          <img
+            src={`http://localhost:8000/${book.cover_image}`}
+            alt={book.book_title}
+            className="book-content-img"
+          />
+          <div className="book-content-info">
+            <h1 className="book-title">{book.book_title}</h1>
+            <div className="book-author">
+              by <span>{book.author}</span> (Author)
+            </div>
+            {book.qty === '0' ? (
+          <label className="btn-dm btn-danger px-4 mt-2">Out of stock</label>
+        ) : (
+          <label className="btn-dm btn-success px-4 mt-2">In stock</label>
+        )}
+            <div className="modal-content-info-price">
+              <div className="row">
+                <div>
+                  <b className="text-decoration-line-through">{book.original_price} </b> DH
+                </div>
+                <div>
+                  <b>{book.selling_price} </b> DH
+                </div>
+              </div>
+            </div>
+            <button onClick={submitAddtoWishlist} type="button" className="btn btn-danger mr-3">
+              Add to wishlist
             </button>
-  </div>*/}
-          <div className="modal-content-info-price">
-            <b>Price: </b>${book.price}
-          </div>
-          <button
-            className="modal-content-info-link"
-          >
-            See More Details
-          </button>
-        </div>
-      </div>
-      <p className="book-description">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium
-        molestiae corporis facere minima consequuntur, blanditiis voluptatem
-        praesentium possimus odit, aliquam temporibus nulla! Delectus quas totam
-        nihil est reiciendis sunt. Ex. Lorem ipsum dolor sit amet consectetur,
-        adipisicing elit. A veritatis vitae hic corrupti voluptas dignissimos
-        consequatur doloribus laborum adipisci quo voluptates dolorum cumque
-        tempora expedita possimus, ab quae tenetur fugit. Lorem ipsum dolor sit
-        amet consectetur adipisicing elit. Laudantium fugit illo porro
-        perspiciatis fuga doloremque placeat assumenda labore! Harum numquam
-        voluptate eveniet libero debitis consequuntur nostrum reiciendis
-        officiis delectus rem.
-      </p>
+              <Button variant="primary" onClick={handleContactSeller}>
+                Contact Seller
+              </Button>
 
-      <div className="book-icons">
-        <div className="book-icon">
-          <small>Print Length</small>
-          <i className="bi bi-file-earmark-break"></i>
-          <b>{book.printLength}pages</b>
+          </div>
         </div>
-        <div className="book-icon">
-          <small>Language</small>
-          <i className="bi bi-globe"></i>
-          <b>{book.language}</b>
-        </div>
-        <div className="book-icon">
-          <small>Publication date</small>
-          <i className="bi bi-calendar3"></i>
-          <b>{book.PublicationDate}</b>
+        <p className="book-description">{book.description}</p>
+        <div className="book-icons">
         </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };

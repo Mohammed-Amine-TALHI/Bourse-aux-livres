@@ -20,7 +20,6 @@ const Addbook = () => {
       genre : '',
       original_price : '',
       selling_price : '',
-      published_date : '',
       qty : '',
       featured : '',
       popular : '',
@@ -77,7 +76,6 @@ const Addbook = () => {
 
       formData.append('author', bookInput.author);
       formData.append('genre', bookInput.genre);
-      formData.append('published_date', bookInput.published_date);
       formData.append('original_price', bookInput.original_price);
       formData.append('selling_price', bookInput.selling_price);
 
@@ -108,8 +106,8 @@ const Addbook = () => {
                   genre : '',
                   original_price : '',
                   selling_price : '',
-                  published_date : '',
                   qty : '',
+                  request: 0,
               });
               setError([]);
           }else if (res.data.status === 422){
@@ -210,10 +208,6 @@ const Addbook = () => {
                                         <input type ="text" name ="author" onChange={handleInput} value={bookInput.author} className="form-control"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
-                                        <label >Published Date</label>
-                                        <input type ="date" name ="published_date" onChange={handleInput} value={bookInput.published_date} className="form-control"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
                                         <label >Genre</label>
                                         <input type ="text" name ="genre" onChange={handleInput} value={bookInput.genre} className="form-control"/>
                                         <small className="text-danger">{errorlist.genre}</small>
@@ -233,18 +227,6 @@ const Addbook = () => {
                                         <label >Quantity</label>
                                         <input type ="text" name ="qty" onChange={handleInput} value={bookInput.qty} className="form-control"/>
                                         <small className="text-danger">{errorlist.qty}</small>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Featured (checked=shown)</label>
-                                        <input type ="checkbox" name ="featured" onChange={handleCheckBox} defaultChecked={allcheckbox.featured === 1 ? true:false} className="w-50 h-50"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Popular (checked=shown)</label>
-                                        <input type ="checkbox" name ="popular" onChange={handleCheckBox} defaultChecked={allcheckbox.popular === 1 ? true:false} className="w-50 h-50"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Status (checked=Hidden)</label>
-                                        <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true:false} className="w-50 h-50"/>
                                     </div>
                                     <div className="col-md-8 from-group mb-3">
                                         <label >Cover Image</label>

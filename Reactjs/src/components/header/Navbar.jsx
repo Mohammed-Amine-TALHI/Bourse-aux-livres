@@ -8,11 +8,11 @@ const Navbar = ({ toggle, setToggle }) => {
           Home
         </Link>
         <Link
-          to="/authors"
+          to="/books"
           onClick={() => setToggle(false)}
           className="navbar-link"
         >
-          Authors
+          Books
         </Link>
         <Link
           to="/collections"

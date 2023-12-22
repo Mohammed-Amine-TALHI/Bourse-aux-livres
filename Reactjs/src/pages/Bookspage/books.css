@@ -1,12 +1,12 @@
-.authors {
+.books {
     padding: 30px;
 }
 
-.authors-search-wrapper {
+.books-search-wrapper {
     margin-bottom: 30px;
 }
 
-.authors-search-wrapper input {
+.books-search-wrapper input {
     width: 100%;
     height: 50px;
     border: 1px solid gray;
@@ -15,7 +15,7 @@
     font-size: 21px;
 }
 
-.authors-wrapper {
+.books-wrapper {
     display: flex;
     align-items: center;
     flex-wrap: wrap;

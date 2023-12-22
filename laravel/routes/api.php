@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WishController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\FrontendController;
@@ -26,7 +27,9 @@ Route::post('login', [AuthController::class,'login']);
 Route::post('register', [AuthController::class,'register']);
 Route::get('getCategory',[FrontendController::class,'category']);
 Route::get('fetchbooks/{slug}',[FrontendController::class,'book']);
-
+Route::get('collections/{category}/{id}',[FrontendController::class,'viewBook']);
+Route::get('Books',[FrontendController::class,'index']);
+Route::post('add-to-wish',[WishController::class,'wish']);
 
 
 
@@ -47,8 +50,11 @@ Route::get('all-category',[CategoryController::class,'allcategory']);
 
 Route::post('store-book',[BookController::class,'store']);
 Route::get('view-books',[BookController::class,'index']);
+Route::get('view-requestbooks',[BookController::class,'indexRequest']);
 Route::get('edit-book/{id}',[BookController::class,'edit']);
+Route::patch('/update-request-status/{id}', [BookController::class, 'updateRequestStatus']);
 Route::post('update-book/{id}',[BookController::class,'update']);
+Route::patch('update-quantity/{id}',[BookController::class,'updateQty']);
 Route::put('users/{id}/update-role', [AuthController::class, 'updateRole']);
 
 

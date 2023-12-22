@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import BookStoreContext from "../../context/bookStorContext";
 import AuthUser from "../../pages/forms/AuthUser";
 import { IoIosLogOut } from "react-icons/io";
+import { FaHeart } from "react-icons/fa";
+
 const HeaderMiddle = () => {
   const [search, setSearch] = useState("");
   const { cartInfoLength } = useContext(BookStoreContext);
@@ -23,16 +25,7 @@ const HeaderMiddle = () => {
         <i className="bi bi-book"></i>
         <b>Store</b>
       </Link>
-      <div className="header-middle-search-box" style={{ width: "300px" }}>
-        <input
-          className="header-middle-search-box-search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          type="search"
-          placeholder="Search"
-        />
-        <i className="bi bi-search header-middle-search-icon"></i>
-      </div>
+      
       {/*<Link to="/cart" className="header-middle-cart-wrapper">
         {cartInfoLength > 0 && (
           <b className="cart-notification">{cartInfoLength}</b>
@@ -41,6 +34,9 @@ const HeaderMiddle = () => {
         </Link>*/}
         {token ? (
           <div className="header-middle-add-box">
+            <Link to="/wish-List"  >
+          <i className="bi bi bi-heart-fill" style={{ color: 'black' }} ></i></Link>
+            <span > | </span> 
             <Link to="/Addbook"  >
           <i className="bi bi-plus-circle" style={{ color: 'black' }} ></i></Link>
           <span > | </span> 

@@ -12,7 +12,6 @@ function AddBook (){
         isbn : '',
         book_title : '',
         description : '',
-        status:'',
         meta_title:'',
         meta_keyword:'',
         meta_descrip:'',
@@ -20,10 +19,7 @@ function AddBook (){
         genre : '',
         original_price : '',
         selling_price : '',
-        published_date : '',
         qty : '',
-        featured : '',
-        popular : '',
         school_name:'',
 
 
@@ -77,7 +73,6 @@ function AddBook (){
 
         formData.append('author', bookInput.author);
         formData.append('genre', bookInput.genre);
-        formData.append('published_date', bookInput.published_date);
         formData.append('original_price', bookInput.original_price);
         formData.append('selling_price', bookInput.selling_price);
 
@@ -108,7 +103,6 @@ function AddBook (){
                     genre : '',
                     original_price : '',
                     selling_price : '',
-                    published_date : '',
                     qty : '',
                 });
                 setError([]);
@@ -208,10 +202,6 @@ function AddBook (){
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Author</label>
                                         <input type ="text" name ="author" onChange={handleInput} value={bookInput.author} className="form-control"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Published Date</label>
-                                        <input type ="date" name ="published_date" onChange={handleInput} value={bookInput.published_date} className="form-control"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Genre</label>

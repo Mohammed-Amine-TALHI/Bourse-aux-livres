@@ -2,13 +2,38 @@ import "./slider.css";
 import FirstBook from "../../images/book1.png";
 import SecondBook from "../../images/book2.png";
 import ThirdBook from "../../images/book3.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Arrow from "./Arrow";
+import AuthUser from "../../pages/forms/AuthUser";
+import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 const Slider = () => {
+  const { http } = AuthUser();
+  const navigate = useNavigate();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
  
   const [slideIndex, setSlideIndex] = useState(0);
+  useEffect(() => {
+    let isMounted = true;
 
+    http.get(`/books`).then((res) => {
+      if (isMounted) {
+        if (res.data.status === 200) {
+          setBook(res.data.books);
+          setLoading(false);
+        } else if (res.data.status === 404) {
+          navigate('/collections');
+          swal('Warning', res.data.message, 'error');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
   // Handle Click
   const handleClick = (direction) => {
     if (direction === "left") {

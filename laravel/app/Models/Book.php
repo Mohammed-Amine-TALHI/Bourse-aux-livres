@@ -22,7 +22,6 @@ class Book extends Model
         'description',
         'status',
         'author',
-        'published_date',
         'selling_price',
         'original_price',
         'genre',
@@ -32,6 +31,7 @@ class Book extends Model
         'popular',
         'description',
         'seller_id',
+        'request',
     ];
     protected $with = ['category', 'user']; 
     public function category()

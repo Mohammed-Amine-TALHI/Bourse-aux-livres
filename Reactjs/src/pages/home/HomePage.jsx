@@ -13,12 +13,10 @@ const HomePage = () => {
       <Header/>
       <Slider />
       <Services />
-      <HeadingTitle title="Most gifted" />
-      <BookSlider data={books} />
-      <HeadingTitle title="Best Seller" />
-      <BookSlider data={books} />
-      <HeadingTitle title="Most wished for" />
-      <BookSlider data={books} />
+      <HeadingTitle title="Popular" />
+      <BookSlider/>
+      <HeadingTitle title="Featured" />
+      <BookSlider/>
       <Footer/>
     </section>
   );

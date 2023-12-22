@@ -14,17 +14,14 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seller_id')->default(1)->constrained('users');
-
             $table->integer('category_id');
             $table->bigInteger('isbn');
             $table->string('book_title');
             $table->longText('description');
-
             $table->string('meta_title')->nullable();
             $table->string('school_name')->nullable();
             $table->mediumText('meta_keyword')->nullable();
             $table->mediumText('meta_descrip')->nullable();
-
             $table->string('author')->nullable();
             $table->date('published_date')->nullable();
             $table->string('selling_price');
@@ -35,6 +32,7 @@ return new class extends Migration
             $table->tinyInteger('featured')->default('0')->nullable();
             $table->tinyInteger('popular')->default('0')->nullable();
             $table->tinyInteger('status')->default('0');
+            $table->tinyInteger('request')->default(0)->comment('0=Requested, 1=Approved, 2=Rejected, etc.');
             $table->timestamps();
         });
     }

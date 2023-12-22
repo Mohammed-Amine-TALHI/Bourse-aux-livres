@@ -23,7 +23,6 @@ function EditBook (props){
         genre : '',
         original_price : '',
         selling_price : '',
-        published_date : '',
         qty : '',
         school_name:'',
 
@@ -94,7 +93,6 @@ function EditBook (props){
 
         formData.append('author', bookInput.author);
         formData.append('genre', bookInput.genre);
-        formData.append('published_date', bookInput.published_date);
         formData.append('original_price', bookInput.original_price);
         formData.append('selling_price', bookInput.selling_price);
 
@@ -112,12 +110,11 @@ function EditBook (props){
           }).then(res =>{
             if (res.data.status === 200){
                 swal('Success',res.data.message,'success');
-                console.log(allcheckbox);
                 setError([]);
             }else if (res.data.status === 422){
                 swal("All Fields are mandetory","","error");
                 setError(res.data.errors);
-            }else if (res.data.status === 422){
+            }else if (res.data.status === 404){
                 swal("Error",res.data.message,"error");
                 navigate('/admin/view-books');
 
@@ -223,10 +220,6 @@ function EditBook (props){
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Author</label>
                                         <input type ="text" name ="author" onChange={handleInput} value={bookInput.author} className="form-control"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Published Date</label>
-                                        <input type ="date" name ="published_date" onChange={handleInput} value={bookInput.published_date} className="form-control"/>
                                     </div>
                                     <div className="col-md-4 from-group mb-3">
                                         <label >Genre</label>

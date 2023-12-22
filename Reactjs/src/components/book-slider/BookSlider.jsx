@@ -1,14 +1,38 @@
-import { useState,useContext } from "react";
+import { useState,useContext, useEffect } from "react";
 import BookStoreContext from "../../context/bookStorContext";
-import Modal from "../modal/Modal";
 import "./book-slider.css";
 import Rating from "./Rating";
+import AuthUser from "../../pages/forms/AuthUser";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
-const BookSlider = ({data}) => {
+const BookSlider = () => {
   const { addToCart } = useContext(BookStoreContext);
   const [slideIndex, setSlideIndex] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
-  const [bookData, setBookData] = useState(null);
+  const { http } = AuthUser();
+  const navigate = useNavigate();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+ 
+  useEffect(() => {
+    let isMounted = true;
+
+    http.get(`/Books`).then((res) => {
+      if (isMounted) {
+        if (res.data.status === 200) {
+          setBook(res.data.books);
+          setLoading(false);
+        } else if (res.data.status === 404) {
+          navigate('/collections');
+          swal('Warning', res.data.message, 'error');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
 
   // Handle Click
   const handleClick = (direction) => {
@@ -19,14 +43,19 @@ const BookSlider = ({data}) => {
     }
   };
 
-  // Handle Modal
-  const handleOpenModal = (item) => {
-    setOpenModal(true);
-    setBookData(item);
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }else {
+
   }
 
 
   return (
+    <div className="row">
     <div className="book-slider-container">
       {slideIndex >= 0 && <i
         onClick={() => handleClick("left")}
@@ -36,28 +65,33 @@ const BookSlider = ({data}) => {
         style={{ transform: `translateX(${slideIndex * -340}px)` }}
         className="book-slider-wrapper"
       >
-        {data.map((item) => (
+        {book.map((item) => (
+          <Link to={`/collections/${item.category.slug}/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <div key={item.id} className="book-slide-item">
             <img
-              src={`/books/${item.image}`}
-              alt={item.title}
+              src={`http://localhost:8000/${item.cover_image}`}
+              alt={item.book_title}
               className="book-slide-item-img"
             />
-            <h3 className="book-slide-item-title">{item.title}</h3>
+            <h3 className="book-slide-item-title">{item.book_title}</h3>
             <Rating rating={item.rating} reviews={item.reviews} />
-            <div className="book-slider-item-price">${item.price}</div>
+            <div className="book-slider-item-price">${item.selling_price}</div>
             <div className="book-slider-icons-wrapper">
-              <i onClick={() => handleOpenModal(item)} className="bi bi-eye-fill"></i>
-              <i onClick={() => addToCart(item, 1)} className="bi bi-cart-plus"></i>
+              <i className="bi bi-eye-fill"></i>
+              
             </div>
           </div>
+          </Link>
         ))}
       </div>
-      {slideIndex <= data.length - 1 && <i
+      {slideIndex <= book.length - 1 && <i
         onClick={() => handleClick("right")}
         className="bi bi-chevron-right book-slider-arrow-right"
       ></i>}
-      {openModal && <Modal bookData={bookData} setOpenModal={setOpenModal} />}
+    </div>
+    <div>
+    <button type="button" className="btn btn-link float-end mr-4" >'View more'</button>
+    </div>
     </div>
   );
 };

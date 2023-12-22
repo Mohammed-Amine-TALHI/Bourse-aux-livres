@@ -11,6 +11,49 @@ use Illuminate\Support\Facades\Auth;
 class BookController extends Controller
 {
     //
+    public function indexRequest(){
+
+        try {
+            $books = Book::where('request', 0)->get();
+    
+            return response()->json([
+                'status' => 200,
+                'books' => $books,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions if any
+            return response()->json([
+                'status' => 500,
+                'message' => 'Error retrieving books',
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+
+    public function updateRequestStatus($id, Request $request)
+    {
+        $this->validate($request, [
+            'request' => 'required|in:0,1,2',
+        ]);
+    
+        try {
+            $book = Book::findOrFail($id);
+    
+            // Update the request status without checking permissions (for testing)
+            $book->update([
+                'request' => $request->input('request'),
+                'status' => $request->input('request') == 1 ? 0 : 1,
+            ]);
+    
+            return response()->json(['status' => 200, 'message' => 'Request status updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 500, 'message' => 'Error updating request status'], 500);
+        }
+    }
+
+
+
 
 
     public function index ()
@@ -35,12 +78,12 @@ class BookController extends Controller
             if ($books->isEmpty()) {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'No books found for the user.',
+                    'message' => 'No books found|Add a book to get access .',
                 ]);
             }
             return response()->json([
                 'status' => 200,
-                'Products' => $books,
+                'books' => $books,
             ]);
          
     }
@@ -83,7 +126,6 @@ class BookController extends Controller
                 $book -> meta_descrip = $request ->input('meta_descrip');
                 $book -> author = $request ->input('author');
                 $book -> genre = $request ->input('genre');
-                $book -> published_date = $request ->input('published_date');
                 $book -> original_price = $request ->input('original_price');
                 $book -> selling_price = $request ->input('selling_price');
                 $book -> qty = $request ->input('qty');
@@ -124,9 +166,9 @@ class BookController extends Controller
                 }*/
                 
 
-                $book -> featured = $request ->input('featured') ;
-                $book -> popular = $request ->input('popular') ;
-                $book -> status = $request ->input('status');
+                $book -> featured = $request ->input('featured') == true ? '1':'0' ;
+                $book -> popular = $request ->input('popular') == true ? '1':'0' ;
+                $book -> status = $request ->input('status') == true ? '1':'0';
                 $book -> update();
                 
                     return response()->json([
@@ -142,6 +184,34 @@ class BookController extends Controller
                 ]);   
             }
         }
+    }
+
+    public function updateQty($id, Request $request){
+        try {
+            $book = Book::findOrFail($id);
+
+            // Validate the request data, if needed
+            $request->validate([
+                'quantity' => 'required|integer|min:0',
+            ]);
+
+            // Update the quantity in the database
+            $book->qty = $request->input('quantity');
+            $book->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Quantity updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to update quantity',
+                'error' => $e->getMessage(),
+            ]);
+        }
+    
+
     }
     public function edit($id)
     {
@@ -199,7 +269,6 @@ class BookController extends Controller
             $book -> meta_descrip = $request ->input('meta_descrip');
             $book -> author = $request ->input('author');
             $book -> genre = $request ->input('genre');
-            $book -> published_date = $request ->input('published_date');
             $book -> original_price = $request ->input('original_price');
             $book -> selling_price = $request ->input('selling_price');
             $book -> qty = $request ->input('qty');

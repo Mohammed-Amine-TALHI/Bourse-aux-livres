@@ -19,7 +19,7 @@ const Services = () => {
       
       <div className="service-item">
         <i className="bi bi-send"></i>
-        <Link to = "/contact">
+        <Link to = "/contact" style={{ textDecoration: 'none', color: 'inherit' }}>
         <b>Contact Us</b>
         </Link>
       </div>
