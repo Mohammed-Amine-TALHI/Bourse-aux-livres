@@ -23,10 +23,10 @@ Install PHP dependencies using Composer:
 composer install
 
    ```bash
-
 cp .env.example .env
 Generate the application key:
-   ```bash
+
+```bash
 
 php artisan key:generate
 Run database migrations:
