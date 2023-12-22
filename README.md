@@ -18,28 +18,26 @@ Before getting started, ensure you have the following installed:
    cd Laravel
 Install PHP dependencies using Composer:
 
-bash
-Copy code
-composer install
-Copy the example .env file and configure it with your environment variables:
+   ```bash
 
-bash
-Copy code
+composer install
+
+   ```bash
+
 cp .env.example .env
 Generate the application key:
+   ```bash
 
-bash
-Copy code
 php artisan key:generate
 Run database migrations:
 
-bash
-Copy code
+   ```bash
+
 php artisan migrate
 Start the Laravel server:
 
-bash
-Copy code
+   ```bash
+
 php artisan serve
 Your backend will be running on http://localhost:8000.
 
@@ -51,8 +49,8 @@ Copy code
 cd Reactjs
 Install Node.js dependencies:
 
-bash
-Copy code
+   ```bash
+
 npm install
 Configure the backend URL in the frontend code:
 
@@ -63,8 +61,8 @@ Copy code
 export const API_BASE_URL = 'http://localhost:8000/api';
 Start the React development server:
 
-bash
-Copy code
+   ```bash
+
 npm start
 Your React application will be running on http://localhost:3000.
 
