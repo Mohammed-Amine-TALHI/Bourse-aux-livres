@@ -15,7 +15,7 @@ Before getting started, ensure you have the following installed:
 1. Navigate to the `backend` directory:
 
    ```bash
-   cd backend
+   cd Laravel
 Install PHP dependencies using Composer:
 
 bash
@@ -48,7 +48,7 @@ Navigate to the frontend directory:
 
 bash
 Copy code
-cd frontend
+cd Reactjs
 Install Node.js dependencies:
 
 bash
