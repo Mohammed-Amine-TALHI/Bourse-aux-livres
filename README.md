@@ -1,4 +1,4 @@
-# Project Name
+# Bourse aux livres
 
 This repository contains a React frontend and a Laravel backend for [Project Name]. It is a web application that [brief description].
 
