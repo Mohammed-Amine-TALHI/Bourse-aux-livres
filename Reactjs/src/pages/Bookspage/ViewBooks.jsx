@@ -46,6 +46,7 @@ const handleSearch = (e) => {
 };
   var display_Booksdata = "";
   var filteredBooks = '';
+  const cardWidth = "20%";
   if (loading) {
     return (
       <div className="loading-container">
@@ -62,8 +63,8 @@ const handleSearch = (e) => {
 );
 if (bookCount>0){
 display_Booksdata = filteredBooks.map((books) => (
-  <div className="col-md-3" key={books.id}>
-    <div className="card">
+  <div className="col-md-6" style={{ width: cardWidth }} key={books.id}>
+    <div className="card" style={{ width: "100%" }}>
       <Link to={`/collections/${books.category.slug}/${books.id}`}>
         <img
           src={`http://localhost:8000/${books.cover_image}`}
@@ -71,9 +72,9 @@ display_Booksdata = filteredBooks.map((books) => (
           alt={books.book_title}
         />
       </Link>
-      <div className="card-body">
-        <Link to={`/collections/${books.category.slug}/${books.id}` }  style={{ textDecoration: 'none', color: 'inherit' }}>
-          <h5>{books.book_title}</h5>
+      <div className="card-body" style={{ width: "100%"  }}  >
+        <Link to={`/collections/${books.category.slug}/${books.id}`  }  style={{ textDecoration: 'none', color: 'inherit' }}>
+          <p className="small">{books.book_title}</p>
         </Link>
       </div>
     </div>

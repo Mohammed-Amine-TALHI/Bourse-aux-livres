@@ -10,7 +10,7 @@ import Navbar from "../../components/header/Navbar";
 
 
 function DashboardUser() {
-    const {http} = AuthUser();
+    const {http,user} = AuthUser();
     const [viewBooks, setBook] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -71,10 +71,13 @@ function DashboardUser() {
             (item.book_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 item.selling_price.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
             (selectedCategory === '' || item.category.name.toLowerCase() === selectedCategory.toLowerCase())
+            
         );
         
         var BookStatus = '';
+        var showQuantityButtons='';
         display_Booksdata = viewBooks.map( (item)=>{
+            showQuantityButtons = user && parseInt(user.id) === parseInt(item.seller_id);
             if (item.status == '0')
             {
                 BookStatus = 'Shown';
@@ -98,7 +101,6 @@ function DashboardUser() {
     }
         const categories = [...new Set(viewBooks.map(item => item.category.name))];
         const sellers = [...new Set(viewBooks.map(item => item.user.name))];
-
 
     return (
         <div className="container mt-3">
@@ -170,13 +172,15 @@ function DashboardUser() {
                                                     ? 'Rejected'
                                                     : 'Unknown Status'}
                                                 </td>
-                                                <td>
-                                                <div className="input-group">
-                                                    <button type="button" className="input-group-text" onClick={() => updateQuantity(item.id, item.qty - 1)}>-</button>
-                                                    <input type="text" className="form-control text-center" value={item.qty} readOnly />
-                                                    <button type="button" className="input-group-text" onClick={() => updateQuantity(item.id, item.qty + 1)}>+</button>
-                                                </div>
-                                            </td>
+                                                {showQuantityButtons && (
+                                                    <td>
+                                                        <div className="input-group">
+                                                            <button type="button" className="input-group-text" onClick={() => updateQuantity(item.id, item.qty - 1)}>-</button>
+                                                            <input type="text" className="form-control text-center" value={item.qty} readOnly />
+                                                            <button type="button" className="input-group-text" onClick={() => updateQuantity(item.id, item.qty + 1)}>+</button>
+                                                        </div>
+                                                    </td>
+                                                )}
                                         </tr>
                                     ))}
                             </tbody>

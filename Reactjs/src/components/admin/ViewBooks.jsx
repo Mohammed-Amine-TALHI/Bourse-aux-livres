@@ -42,7 +42,7 @@ function ViewBooks() {
             const response = await http.patch(`/update-quantity/${id}`, {
                 quantity: newQuantity,
             });
-
+    
             if (response.data.status === 200) {
                 // Update the local state with the new quantity
                 const updatedBooks = viewBooks.map(book =>

@@ -21,6 +21,7 @@ function AddBook (){
         selling_price : '',
         qty : '',
         school_name:'',
+        status: 1,
 
 
     });
@@ -79,7 +80,6 @@ function AddBook (){
         formData.append('qty', bookInput.qty);
         formData.append('featured', allcheckbox.featured ? '1':'0');
         formData.append('popular', allcheckbox.popular ? '1':'0');
-        formData.append('status', allcheckbox.status ? '1':'0');
 
         http.post(`/store-book`, formData, {
             headers: {
@@ -224,18 +224,32 @@ function AddBook (){
                                         <input type ="text" name ="qty" onChange={handleInput} value={bookInput.qty} className="form-control"/>
                                         <small className="text-danger">{errorlist.qty}</small>
                                     </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Featured (checked=shown)</label>
-                                        <input type ="checkbox" name ="featured" onChange={handleCheckBox} defaultChecked={allcheckbox.featured === 1 ? true:false} className="w-50 h-50"/>
+                                    <div className="row">
+                                        <div className="col-md-4 form-group mb-3">
+                                            <label>Featured (checked=shown)</label>
+                                            <input
+                                                type="checkbox"
+                                                name="featured"
+                                                onChange={handleCheckBox}
+                                                defaultChecked={allcheckbox.featured === 1 ? true : false}
+                                                className="w-50 h-50"
+                                            />
+                                        </div>
+                                        <div className="col-md-4 form-group mb-3">
+                                            <label>Popular (checked=shown)</label>
+                                            <input
+                                                type="checkbox"
+                                                name="popular"
+                                                onChange={handleCheckBox}
+                                                defaultChecked={allcheckbox.popular === 1 ? true : false}
+                                                className="w-50 h-50"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-md-4 from-group mb-3">
-                                        <label >Popular (checked=shown)</label>
-                                        <input type ="checkbox" name ="popular" onChange={handleCheckBox} defaultChecked={allcheckbox.popular === 1 ? true:false} className="w-50 h-50"/>
-                                    </div>
-                                    <div className="col-md-4 from-group mb-3">
+                                    {/*<div className="col-md-4 from-group mb-3">
                                         <label >Status (checked=Hidden)</label>
                                         <input type ="checkbox" name ="status" onChange={handleCheckBox} defaultChecked={allcheckbox.status === 1 ? true:false} className="w-50 h-50"/>
-                                    </div>
+                            </div>*/}
                                     <div className="col-md-8 from-group mb-3">
                                         <label >Cover Image</label>
                                         <input type ="file" name ="cover_image" onChange={handleImage}  className="form-control"/>

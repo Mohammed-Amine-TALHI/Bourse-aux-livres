@@ -28,6 +28,7 @@ Route::post('register', [AuthController::class,'register']);
 Route::get('getCategory',[FrontendController::class,'category']);
 Route::get('fetchbooks/{slug}',[FrontendController::class,'book']);
 Route::get('collections/{category}/{id}',[FrontendController::class,'viewBook']);
+Route::get('Books-slider',[FrontendController::class,'indexSlider']);
 Route::get('Books',[FrontendController::class,'index']);
 Route::post('add-to-wish',[WishController::class,'wish']);
 Route::get('wish-List',[WishController::class,'Viewish']);

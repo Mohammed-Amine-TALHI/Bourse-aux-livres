@@ -36,7 +36,7 @@ function ViewUsers (){
                     <td>{item.phonenumber}</td>
                     <td>{item.role}</td>
                     <td><Link  to={`/admin/edit-user`} className="btn btn-success btn-sm">Edit</Link></td>
-                    <td><button type='button' /*onClick={(e)=> deleteCategory(e,item.id)}*/ className="btn btn-danger btn-sm">Delete</button></td>
+                    
                 </tr>
             )
 
@@ -62,7 +62,6 @@ function ViewUsers (){
                             <th scope="col">Phone number</th>
                             <th scope="col">Role</th>
                             <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
                             </tr>
                         </thead>
                         <tbody>

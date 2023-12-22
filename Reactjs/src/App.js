@@ -7,7 +7,6 @@ import ViewBooks from "./pages/Bookspage/ViewBooks";
 import BookPage from "./pages/book/BookPage";
 import Cart from "./pages/cart/Cart";
 import Collection from "./pages/Collection/Collection";
-import WishList from "./pages/Collection/WishList";
 import ViewBook from "./pages/Collection/ViewBook";
 import Login from "./pages/forms/Login";
 import Register from "./pages/forms/Register";
@@ -37,7 +36,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/collections/:category/:id" element={<BookPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/wish-List" element={<WishList />} />
+
         <Route path="/register" element={<Register />} />
         <Route path="/collections" element={<Collection />} />
         <Route path="/collections/:slug" element={<ViewBook />} />

@@ -76,11 +76,26 @@ class FrontendController extends Controller
       }
     }
 
+    public function indexSlider(){
+      $bookP = Book::where('popular','1')->get();
+      $bookF = Book::where('featured','1')->get();
+
+        return response()->json([
+            'status'=>200,
+            'bookP'=>$bookP,
+            'bookF'=>$bookF,
+
+        ]);
+    }
+
     public function index(){
       $book = Book::where('status','0')->get();
+
+
         return response()->json([
             'status'=>200,
             'books'=>$book,
+
         ]);
     }
 

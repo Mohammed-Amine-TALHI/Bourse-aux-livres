@@ -15,8 +15,6 @@ const HomePage = () => {
       <Services />
       <HeadingTitle title="Popular" />
       <BookSlider/>
-      <HeadingTitle title="Featured" />
-      <BookSlider/>
       <Footer/>
     </section>
   );
