@@ -7,7 +7,6 @@ import { FaHeart } from "react-icons/fa";
 
 const HeaderMiddle = () => {
   const [search, setSearch] = useState("");
-  const { cartInfoLength } = useContext(BookStoreContext);
   const {getToken,token,logout} = AuthUser() 
 
   const logoutUser = () => {
@@ -25,13 +24,6 @@ const HeaderMiddle = () => {
         <i className="bi bi-book"></i>
         <b>Store</b>
       </Link>
-      
-      {/*<Link to="/cart" className="header-middle-cart-wrapper">
-        {cartInfoLength > 0 && (
-          <b className="cart-notification">{cartInfoLength}</b>
-        )}
-        <i className="bi bi-cart2"></i>
-        </Link>*/}
         {token ? (
           <div className="header-middle-add-box">
             <Link to="/wish-List"  >

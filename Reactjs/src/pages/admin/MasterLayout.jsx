@@ -24,6 +24,8 @@ const fetchUserDetail = () =>{
         setUserdetail(res.data);
     })
 }
+
+
 function renderElement(){
     if(userdetail){
         return <div >

@@ -9,6 +9,51 @@ use Illuminate\Support\Facades\Auth;
 
 class WishController extends Controller
 {
+    public function delete ($wish_id){
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $wishitems = Wish::where('id',$wish_id)->where('user_id',$user_id)->first();
+            if ($wishitems){
+
+                $wishitems->delete();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Wish item Removed Successfully',
+                ]);
+
+
+
+            }else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Wish Item not Found',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status' => 401,
+                'message' => 'Login to add to Wishlist.'
+            ]);
+        }
+
+    }
+    public function Viewish(){
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $bookitems = Book::where('seller_id',$user_id)->get();
+            return response()->json([
+                'status' => 200,
+                'wish' => $bookitems,
+            ]);
+        
+        }else{
+            return response()->json([
+                'status' => 401,
+                'message' => 'Login to add to Wishlist.'
+            ]);
+        }
+
+    }
     public function wish(Request $request)
     {
         if (Auth::check()) {

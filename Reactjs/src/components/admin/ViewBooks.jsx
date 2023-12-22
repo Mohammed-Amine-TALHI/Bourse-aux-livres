@@ -71,14 +71,6 @@ function ViewBooks() {
             (selectedId === '' || item.id.toString() === selectedId)
         );
         display_Booksdata = filteredBooks.map((item) => {
-            var BookStatus = '';
-            if (item.request == '0') {
-                BookStatus = 'Pending';
-            } else if (item.status == '1') {
-                BookStatus = 'Accepted';
-            }else if(item.status == '2'){
-                BookStatus = 'Rejected';
-            }
             const showQuantityButtons = user && parseInt(user.id) === parseInt(item.seller_id);
 
             return (
@@ -90,7 +82,15 @@ function ViewBooks() {
                     <td>{item.selling_price}</td>
                     <td><img src={`http://127.0.0.1:8000/${item.cover_image}`} alt={item.book_title} width="50px" /></td>
                     <td><Link to={`/admin/edit-book/${item.id}`} className="btn btn-success btn-sm">Edit</Link></td>
-                    <td>{BookStatus}</td>
+                    <td>{item.request == '0' ? (
+                            <span>Pending</span>
+                        ) : item.request == '1' ? (
+                            <span>Accepted</span>
+                        ) : item.request == '2' ? (
+                            <span>Rejected</span>
+                        ) : (
+                            <span>Unknown Status</span>
+                        )}</td>
                     {showQuantityButtons && (
                         <td>
                             <div className="input-group">

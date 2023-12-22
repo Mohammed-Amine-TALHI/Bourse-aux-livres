@@ -30,7 +30,8 @@ Route::get('fetchbooks/{slug}',[FrontendController::class,'book']);
 Route::get('collections/{category}/{id}',[FrontendController::class,'viewBook']);
 Route::get('Books',[FrontendController::class,'index']);
 Route::post('add-to-wish',[WishController::class,'wish']);
-
+Route::get('wish-List',[WishController::class,'Viewish']);
+Route::delete('dalate-wish/{wish_id}',[WishController::class,'delete']);
 
 
 Route::group(['middleware'=>'api'],function(){
@@ -38,6 +39,7 @@ Route::post('logout', [AuthController::class,'logout']);
 Route::post('refresh', [AuthController::class,'refresh']);
 Route::post('me', [AuthController::class,'me']);
 Route::get('users', [AuthController::class,'index']);
+
 
 
 Route::get('view-category',[CategoryController::class,'index']);
