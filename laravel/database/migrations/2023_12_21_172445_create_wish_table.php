@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('wish', function (Blueprint $table) {
             $table->id();
-            $table->integer('book_id');
-            $table->integer('user_id');
+            $table->foreignId('book_id')->constrained('books')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['book_id', 'user_id']);
         });
     }
 

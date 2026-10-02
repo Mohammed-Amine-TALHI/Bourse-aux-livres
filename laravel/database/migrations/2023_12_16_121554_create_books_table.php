@@ -13,26 +13,22 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('seller_id')->default(1)->constrained('users');
-            $table->integer('category_id');
-            $table->bigInteger('isbn');
+            $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('book_title');
-            $table->longText('description');
-            $table->string('meta_title')->nullable();
-            $table->string('school_name')->nullable();
-            $table->mediumText('meta_keyword')->nullable();
-            $table->mediumText('meta_descrip')->nullable();
             $table->string('author')->nullable();
-            $table->date('published_date')->nullable();
-            $table->string('selling_price');
-            $table->string('original_price');
-            $table->string('genre');
-            $table->string('qty');
+            $table->string('isbn', 32)->nullable();
+            $table->string('school_name')->nullable();
+            $table->string('genre')->nullable();
+            $table->text('description');
+            $table->decimal('selling_price', 8, 2);
+            $table->decimal('original_price', 8, 2)->nullable();
+            $table->unsignedInteger('qty')->default(1);
             $table->string('cover_image')->nullable();
-            $table->tinyInteger('featured')->default('0')->nullable();
-            $table->tinyInteger('popular')->default('0')->nullable();
-            $table->tinyInteger('status')->default('0');
-            $table->tinyInteger('request')->default(0)->comment('0=Requested, 1=Approved, 2=Rejected, etc.');
+            $table->boolean('featured')->default(false);
+            $table->boolean('popular')->default(false);
+            $table->tinyInteger('status')->default(0)->comment('0=visible, 1=hidden');
+            $table->tinyInteger('request')->default(0)->comment('0=pending, 1=approved, 2=rejected');
             $table->timestamps();
         });
     }

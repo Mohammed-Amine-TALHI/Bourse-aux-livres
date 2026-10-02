@@ -1,71 +1,154 @@
-# Bourse aux livres
+# Bourse aux Livres
 
-This repository contains a React frontend and a Laravel backend for [Project Name]. It is a web application that [brief description].
+A student book exchange: students list the second-hand textbooks and novels they no longer need, an administrator
+reviews each listing, and buyers contact the seller directly to meet on campus.
 
-## Prerequisites
+The project is a **React** single-page application talking to a **Laravel** REST API secured with **JWT**.
 
-Before getting started, ensure you have the following installed:
+![Home page](docs/screenshots/01-home.png)
 
-- Node.js (https://nodejs.org) - for running the React frontend
-- PHP (https://www.php.net) - for running the Laravel backend
-- Composer (https://getcomposer.org) - for managing PHP dependencies
+## Features
 
-## Setting Up the Backend (Laravel)
+**Visitors**
 
-1. Navigate to the `backend` directory:
+- Browse the catalogue, search by title, author, ISBN or school, filter by collection and sort by price or date
+- Browse books by collection, see popular, featured and recently added books on the home page
+- Responsive layout, from phones to large screens
 
-   ```bash
-   cd Laravel
-Install PHP dependencies using Composer:
+**Students (logged in)**
 
-   ```bash
+- Sign up, log in, edit their profile and password
+- List a book for sale with a cover picture; edit, hide or delete their own listings and keep the stock up to date
+- Follow the status of each listing (pending review, approved, rejected)
+- Save books to a wishlist and contact sellers by phone or WhatsApp
 
-composer install
+**Administrators**
 
-   ```bash
-cp .env.example .env
-Generate the application key:
+- Dashboard with key figures and a review queue to approve or reject new listings
+- Manage every book, feature books on the home page
+- Create, edit, hide and delete collections
+- Promote users to administrators
+
+## Screenshots
+
+| Catalogue | Book page |
+| --- | --- |
+| ![Catalogue](docs/screenshots/03-books.png) | ![Book page](docs/screenshots/07-book-details.png) |
+
+| Sell a book | My books |
+| --- | --- |
+| ![Sell a book](docs/screenshots/10-sell-a-book.png) | ![My books](docs/screenshots/09-my-books.png) |
+
+| Admin dashboard | Admin: books |
+| --- | --- |
+| ![Admin dashboard](docs/screenshots/12-admin-dashboard.png) | ![Admin books](docs/screenshots/13-admin-books.png) |
+
+| Log in | Mobile |
+| --- | --- |
+| ![Log in](docs/screenshots/05-login.png) | <img src="docs/screenshots/17-mobile-home.png" alt="Mobile home page" width="260" /> |
+
+More screenshots are available in [`docs/screenshots`](docs/screenshots).
+
+## Tech stack
+
+| Layer | Tools |
+| --- | --- |
+| Frontend | React 18, React Router 7, Axios, Vite, plain CSS design system, Bootstrap Icons |
+| Backend | Laravel 12 (PHP 8.2+), Eloquent, JWT authentication (`tymon/jwt-auth`) |
+| Database | MySQL (SQLite also works for local development) |
+| Tests | PHPUnit feature tests for the API |
+
+## Project structure
+
+```
+Bourse-aux-livres/
+├── laravel/     REST API (routes/api.php, app/Http/Controllers, app/Models, database/)
+├── Reactjs/     React application (src/pages, src/components, src/context, src/styles)
+└── docs/        Screenshots
+```
+
+## Getting started
+
+### Requirements
+
+- PHP 8.2 or newer and [Composer](https://getcomposer.org)
+- Node.js 20 or newer
+- MySQL (or SQLite)
+
+### 1. Backend (Laravel API)
 
 ```bash
-
+cd laravel
+composer install
+cp .env.example .env
 php artisan key:generate
-Run database migrations:
+php artisan jwt:secret
+```
 
-   ```bash
+Create a MySQL database named `bourse_aux_livres` and check the `DB_*` values in `.env`
+(to use SQLite instead, set `DB_CONNECTION=sqlite` and create an empty `database/database.sqlite` file).
 
-php artisan migrate
-Start the Laravel server:
-
-   ```bash
-
+```bash
+php artisan migrate --seed
 php artisan serve
-Your backend will be running on http://localhost:8000.
+```
 
-Setting Up the Frontend (React)
-Navigate to the frontend directory:
+The API is now running on http://localhost:8000.
 
-bash
-Copy code
+### 2. Frontend (React)
+
+```bash
 cd Reactjs
-Install Node.js dependencies:
-
-   ```bash
-
 npm install
-Configure the backend URL in the frontend code:
+cp .env.example .env
+npm run dev
+```
 
-Update src/config.js or relevant configuration files with the backend URL, for example:
+Open http://localhost:3000. The API URL can be changed with `VITE_API_URL` in `Reactjs/.env`.
 
-javascript
-Copy code
-export const API_BASE_URL = 'http://localhost:8000/api';
-Start the React development server:
+### Demo accounts
 
-   ```bash
+`php artisan migrate --seed` creates a small catalogue and these accounts (password: `password`):
 
-npm start
-Your React application will be running on http://localhost:3000.
+| Role | Email |
+| --- | --- |
+| Administrator | `admin@bourse.test` |
+| Student | `salma@bourse.test` |
+| Student | `youssef@bourse.test` |
+| Student | `ines@bourse.test` |
 
-Usage
-Access the frontend by opening http://localhost:3000 in your browser.
-Use the backend API endpoints defined in the Laravel routes for backend functionality.
+## API overview
+
+All routes are prefixed with `/api`. Protected routes expect an `Authorization: Bearer <token>` header.
+
+| Method | Route | Access | Description |
+| --- | --- | --- | --- |
+| POST | `/register`, `/login` | Public | Create an account / get a token |
+| GET | `/books`, `/books/highlights`, `/books/{id}` | Public | Catalogue, home page data, book details |
+| GET | `/categories`, `/categories/{slug}/books` | Public | Collections and their books |
+| GET, PUT | `/me` | User | Read / update the profile |
+| POST | `/logout`, `/refresh` | User | Invalidate / refresh the token |
+| GET | `/my/books` | User | Listings of the logged-in user |
+| POST | `/books`, `/books/{id}` | User | Create / update a listing (owner or admin) |
+| PATCH | `/books/{id}/quantity` | User | Update the stock (owner or admin) |
+| DELETE | `/books/{id}` | User | Delete a listing (owner or admin) |
+| GET, POST | `/wishlist` | User | Read / add to the wishlist |
+| DELETE | `/wishlist/{bookId}` | User | Remove from the wishlist |
+| GET | `/admin/stats`, `/admin/books`, `/admin/users` | Admin | Dashboard data |
+| PATCH | `/admin/books/{id}/request` | Admin | Approve or reject a listing |
+| GET, POST, PUT, DELETE | `/admin/categories` | Admin | Manage collections |
+| PUT | `/admin/users/{id}/role` | Admin | Change a user's role |
+
+## Tests
+
+```bash
+cd laravel
+php artisan test
+```
+
+The feature tests cover authentication, validation, the review workflow, ownership rules, admin-only routes and the
+wishlist. They run on an in-memory SQLite database.
+
+## Author
+
+Mohammed Amine TALHI - EMINES, School of Industrial Management (UM6P).
